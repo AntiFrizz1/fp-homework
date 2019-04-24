@@ -58,12 +58,6 @@ twoStringChar = do
   _ <- (char '"')
   return $ '"'
 
--- stringChar :: Parser Char
--- stringChar = do
---   _ <- count 1 (char '\\')
---   _ <- count 1 (char '"')
---   return $ '"'
-
 notThat :: Char -> Parser Char
 notThat c = satisfy (\s -> s /= c)
 
@@ -147,10 +141,6 @@ line = do
     (\_ -> return ())))
   return $ AssignedLine x y
 
--- isEmptyList :: [a] -> Bool
--- isEmptyList [] = True
--- isEmptyList _  = False
-
 readLine :: Parser Line
 readLine = do
   _ <- space
@@ -180,11 +170,6 @@ spaceParse :: Parser Expression
 spaceParse = do
   _ <- some (char ' ')
   return $ Space
-
--- deleteOneSpace :: [Expression] -> [Expression]
--- deleteOneSpace [] = []
--- deleteOneSpace (Space:as) = as
--- deleteOneSpace a = a
 
 echoLine :: Parser Line
 echoLine = do
@@ -254,12 +239,6 @@ exit = do
   _ <- ((eol >>= (\_ -> return ())) <|> eof <|> (char ';' >>= (\_ -> return ())))
   return $ Exit p
 
--- update :: String -> String -> [(String, String)] -> [(String, String)]
--- update _ _ [] = []
--- update var value ((a, b):as) =
---   let q = if (var == a) then value else b
---   in (a, q):(update var value as)
-
 set :: String -> String -> [(String, String)] -> [(String, String)]
 set var value [] = [(var, value)]
 set var value ((a, b):as) =
@@ -325,11 +304,6 @@ test = do
   x <- newLine
   _ <- space
   getInput >>= (\s -> return (x, s))
-
--- deleteChars :: Int -> String -> String
--- deleteChars 0 a = a
--- deleteChars _ [] = []
--- deleteChars n (_:as) = deleteChars (n - 1) as
 
 myConcat :: [String] -> String
 myConcat [] = ""
