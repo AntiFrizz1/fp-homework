@@ -21,14 +21,22 @@ library
   exposed-modules:     Lib
   ghc-options:         -Wall
   build-depends:       base >= 4.9 && < 5
+                      , mtl
+                      , megaparsec
+                      , directory
+                      , process
   default-language:    Haskell2010
 
-executable hw3
+executable mini-shell
   hs-source-dirs:      app
   main-is:             Main.hs
   ghc-options:         -Wall -Werror -threaded -rtsopts -with-rtsopts=-N
   build-depends:       base
                      , hw3
+                     , mtl
+                     , megaparsec
+                     , directory
+                     , process
   default-language:    Haskell2010
 
 test-suite hw3-test
@@ -37,5 +45,9 @@ test-suite hw3-test
   main-is:             Spec.hs
   build-depends:       base
                      , hw3
+                     , mtl
+                     , megaparsec
+                     , directory
+                     , process
   ghc-options:         -Wall -Werror -threaded -rtsopts -with-rtsopts=-N
   default-language:    Haskell2010
