@@ -2,6 +2,7 @@
 {-# LANGUAGE GeneralizedNewtypeDeriving #-}
 {-# LANGUAGE DeriveAnyClass #-}
 {-# LANGUAGE DeriveDataTypeable #-}
+{-# LANGUAGE BangPatterns #-}
 module Task6
     ( FS(..)
     , getDirectory'
@@ -41,13 +42,18 @@ getDirectory' :: FilePath -> IO FS
 getDirectory' path = preparePath path >>= (\(p, n) -> getDirectoryHelp p n)
   where
     getDirectoryHelp :: FilePath -> FilePath -> IO FS
-    getDirectoryHelp pa na = doesFileExist pa >>= (\s -> case s of
-      True -> return $ File na
-      False -> doesDirectoryExist pa >>= (\st -> case st of
-        True -> listDirectory pa >>= (\sr ->
-         sequenceA (fmap (\n -> getDirectoryHelp (pa ++ "/" ++ n) n) sr) >>= (\p ->
-          return $ Dir na p))
-        False -> throwIO IncorrectFilePath))
+    getDirectoryHelp pa na = do
+      !s <- doesFileExist pa
+      if (s)
+        then return $ File na
+        else do
+          !st <- doesDirectoryExist pa
+          if (st)
+            then do
+              !sr <- listDirectory pa
+              sequenceA (fmap (\n -> getDirectoryHelp (pa ++ "/" ++ n) n) sr)
+               >>= (\p -> return $ Dir na p)
+            else throwIO IncorrectFilePath
 
     preparePath :: FilePath -> IO (FilePath, FilePath)
     preparePath pa = canonicalizePath pa >>= (\s ->

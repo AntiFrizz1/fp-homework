@@ -18,8 +18,7 @@ tested-with:         GHC == 8.0.1
 
 library
   hs-source-dirs:      src
-  exposed-modules:     Lib
-                     , Task5
+  exposed-modules:     Task5
                      , Task6
   ghc-options:         -Wall -Werror -threaded -rtsopts -with-rtsopts=-N
   build-depends:       base >= 4.9 && < 5
